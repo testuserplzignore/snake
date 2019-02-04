@@ -23,8 +23,8 @@ const createGameboard = () => {
     }
     gameboard.removeEventListener('click', createGameboard);
     character = createCharacter();
-    growTail(3);
-    document.body.addEventListener('keydown', userMove);
+    growTail(10);
+    document.body.addEventListener('keyup', userMove);
 };
 
 const createCharacter = () => {
@@ -47,6 +47,7 @@ const newPos = () => {
     const newId = xy[0] + ',' +xy[1];
     newTail = character;
     character = document.getElementById(newId);
+    loseCon(character.classList)
     character.classList.add('character');
 };
 
@@ -61,14 +62,6 @@ const moveTail = () => {
     const oldTail = tail.pop();
     //say(oldTail);
     oldTail.classList.remove('tail');
-};
-
-const manageSnake = () => {
-    const update = newPos(character, xy);
-    newTail = update[1];
-    character = update[0];
-    moveTail();
-    return update;
 };
 
 const moveDown = () => {
@@ -106,21 +99,27 @@ let leftVel;
 let downVel;
 let upVel;
 
-//dead end
-//const checkMove = (character, keyPress, axis, xyMax) =>{
-//    if (event.key === keyPress && xy[axis] < xyMax) {
-//        xy[0]++;
-//        newPos(character);
-//        say(xy);
-//    }
-//}
-
-
+const loseCon = (elementClassList) => {
+    elementClassList.forEach((element) => {
+        const charXY = parseIdToNum(character.id);
+        say(charXY);
+        if(element === 'tail'){
+            alert('you lost')
+        }
+        if(charXY[0]>47 || charXY[0]<0){
+            alert('you lost')
+        }
+        if(charXY[1]>47 || charXY[1]<0){
+            alert('you lost')
+        }
+    })
+}
 
 const userMove = () => {
     //debugger;
     character = document.querySelector('.character');
     xy = parseIdToNum(character.id);
+
     if (event.key === 'ArrowRight' && xy[0] < 47) {
         clearAllIntervals();
         rightVel = setInterval(moveRight, 500);
