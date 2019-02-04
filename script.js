@@ -1,6 +1,7 @@
 const say = msg => console.log(msg);
 
 const gameboard = document.querySelector('#gameboard');
+const tail = [];
 
 const createGameboard = () => {
     for(let y=0; y<48; y++) {
@@ -19,6 +20,7 @@ const createGameboard = () => {
     }
     gameboard.removeEventListener('click', createGameboard);
     let character = createCharacter();
+    growTail(null, 3);
     document.body.addEventListener('keydown', userMove);
 };
 
@@ -44,6 +46,24 @@ const newPos = (character) => {
     return newTail;
 };
 
+const growTail = (newTail, length) => {
+    for (let i = 0; i < length; i++) tail.push(newTail);
+};
+
+const moveTail = (newTail) => {
+    //say(newTail);
+    newTail.classList.add('tail');
+    tail.unshift(newTail);
+    oldTail = document.getElementById(tail.pop().id);
+    say(oldTail);
+    oldTail.classList.remove('tail');
+}
+
+const manageSnake = (character) => {
+    newTail = newPos(character);
+    moveTail(newTail);
+};
+
 
 //dead end
 //const checkMove = (character, keyPress, axis, xyMax) =>{
@@ -58,26 +78,31 @@ const userMove = () => {
     let character = document.querySelector('.character');
     let xy = parseIdToNum(character.id);
     if (event.key === 'ArrowRight' && xy[0] < 47) {
-        xy[0]++;
-        newPos(character);
-        say(xy);
+        setInterval(()=>{
+            xy[0]++;
+        manageSnake(character);
+        }, 500);
+        
+        //say(xy);
     }
-}
 
     if (event.key === 'ArrowLeft' && xy[0] > 0) {
         xy[0]--;
-        newPos(character);
-        say(xy);
+        newTail = newPos(character);
+        moveTail(newTail);
+        //say(xy);
     }
     if (event.key === 'ArrowDown' && xy[1] < 47) {
         xy[1]++;
-        newPos(character);
-        say(xy);
+        newTail = newPos(character);
+        moveTail(newTail);
+        //say(xy);
     }
     if (event.key === 'ArrowUp' && xy[1] > 0) {
         xy[1]--;
-        newPos(character);
-        say(xy);
+        newTail = newPos(character);
+        moveTail(newTail);
+        //say(xy);
     }
 };
 
