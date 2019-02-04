@@ -2,6 +2,9 @@ const say = msg => console.log(msg);
 
 const gameboard = document.querySelector('#gameboard');
 const tail = [];
+let xy = [];
+let character;
+let newTail;
 
 const createGameboard = () => {
     for(let y=0; y<48; y++) {
@@ -19,8 +22,8 @@ const createGameboard = () => {
         gameboard.appendChild(row);
     }
     gameboard.removeEventListener('click', createGameboard);
-    let character = createCharacter();
-    growTail(null, 3);
+    character = createCharacter();
+    growTail(3);
     document.body.addEventListener('keydown', userMove);
 };
 
@@ -37,33 +40,71 @@ const parseIdToNum = (idString) => {
     return(xy);
 };
 
-const newPos = (character) => {
-    character.classList.remove('character')
-    newId = xy[0] + ',' +xy[1];
-    const newTail = character;
+const newPos = () => {
+    //say(character);
+    character.classList.remove('character');
+    //say('xy in new pos: ' + xy);
+    const newId = xy[0] + ',' +xy[1];
+    newTail = character;
     character = document.getElementById(newId);
     character.classList.add('character');
-    return newTail;
 };
 
-const growTail = (newTail, length) => {
+const growTail = (length) => {
     for (let i = 0; i < length; i++) tail.push(newTail);
 };
 
-const moveTail = (newTail) => {
+const moveTail = () => {
     //say(newTail);
     newTail.classList.add('tail');
     tail.unshift(newTail);
-    oldTail = document.getElementById(tail.pop().id);
-    say(oldTail);
+    const oldTail = tail.pop();
+    //say(oldTail);
     oldTail.classList.remove('tail');
-}
-
-const manageSnake = (character) => {
-    newTail = newPos(character);
-    moveTail(newTail);
 };
 
+const manageSnake = () => {
+    const update = newPos(character, xy);
+    newTail = update[1];
+    character = update[0];
+    moveTail();
+    return update;
+};
+
+const moveDown = () => {
+    xy[1]++;
+    newPos();
+    moveTail();
+};
+
+const moveUp = () => {
+    xy[1]--;
+    newPos();
+    moveTail();
+};
+
+const moveLeft = () => {
+    xy[0]--
+    newPos();
+    moveTail();
+};
+
+const moveRight = () => {
+    xy[0]++;
+    newPos();
+    moveTail();
+};
+
+const clearAllIntervals = () => {
+    clearInterval(rightVel);
+    clearInterval(leftVel);
+    clearInterval(downVel);
+    clearInterval(upVel);
+}; 
+let rightVel;
+let leftVel;
+let downVel;
+let upVel;
 
 //dead end
 //const checkMove = (character, keyPress, axis, xyMax) =>{
@@ -74,35 +115,30 @@ const manageSnake = (character) => {
 //    }
 //}
 
+
+
 const userMove = () => {
-    let character = document.querySelector('.character');
-    let xy = parseIdToNum(character.id);
+    //debugger;
+    character = document.querySelector('.character');
+    xy = parseIdToNum(character.id);
     if (event.key === 'ArrowRight' && xy[0] < 47) {
-        setInterval(()=>{
-            xy[0]++;
-        manageSnake(character);
-        }, 500);
-        
-        //say(xy);
+        clearAllIntervals();
+        rightVel = setInterval(moveRight, 500);
     }
 
     if (event.key === 'ArrowLeft' && xy[0] > 0) {
-        xy[0]--;
-        newTail = newPos(character);
-        moveTail(newTail);
-        //say(xy);
+        clearAllIntervals();
+        leftVel = setInterval(moveLeft, 500);
     }
+
     if (event.key === 'ArrowDown' && xy[1] < 47) {
-        xy[1]++;
-        newTail = newPos(character);
-        moveTail(newTail);
-        //say(xy);
+        clearAllIntervals();
+        downVel = setInterval(moveDown, 500);
     }
+
     if (event.key === 'ArrowUp' && xy[1] > 0) {
-        xy[1]--;
-        newTail = newPos(character);
-        moveTail(newTail);
-        //say(xy);
+        clearAllIntervals();
+        upVel = setInterval(moveUp, 500);
     }
 };
 

@@ -22,10 +22,9 @@
     width: 10px;
 }
 
-.character {
-    background-color: red;
-}
-
 .tail {
     background-color: green; 
+}
+.character {
+    background-color: red;
 }
