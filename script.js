@@ -1,12 +1,19 @@
 const say = msg => console.log(msg);
 
-const gameboard = document.querySelector('#gameboard');
-const tail = [];
+let gameboard = document.querySelector('.gameboard');
+const scoreboard = document.querySelector('.score');
+const levelboard = document.querySelector('.level');
+let tail = [];
 let xy = [];
 let character;
 let newTail;
 let fruit;
+
+let level = 1;
 let speed = 200;
+let score = 0;
+let count = 0;
+
 
 const createGameboard = () => {
     for(let y=0; y<48; y++) {
@@ -24,8 +31,8 @@ const createGameboard = () => {
         gameboard.appendChild(row);
     }
     gameboard.removeEventListener('click', createGameboard);
-    character = createCharacter();
-    newTail = character;
+    newTail = character = createCharacter();
+    //newTail = character;
     createFruit();
     growTail(5);
     document.body.addEventListener('keydown', userMove);
@@ -59,12 +66,22 @@ const loseCon = (element) => {
 const lose = () => {
     alert('you lost');
     clearAllIntervals();
-    document.body.removeEventListener('keyup', userMove);
-    //gameboard.addEventListener('click', createGameboard);
+    document.body.removeEventListener('keydown', userMove);
+    gameboard.remove();
+    gameboard = document.createElement('div');
+    gameboard.classList.add('gameboard');
+    tail = [];
+    score = 0;
+    scoreboard.innerText = score + '|';
+    level = 1;
+    levelboard.innerText = level;
+    
+    const game = document.querySelector('.game');
+    game.appendChild(gameboard);
+    gameboard.addEventListener('click', createGameboard);
 }
 
 const newPos = () => {
-    debugger;
     loseCon(character);
     character.classList.add('tail');
     eatFruit()
@@ -72,7 +89,6 @@ const newPos = () => {
     const newId = xy[0] + ',' +xy[1];
     newTail = character;
     character = document.getElementById(newId);
-    say(character);
     character.classList.add('character');
 };
 
@@ -130,14 +146,29 @@ const createFruit = () => {
     fruit.classList.add('fruit');
 };
 
+const updateScore = () => {
+    score += (10 * level);
+    scoreboard.innerText = score+ '|';
+}
+
+const updateLevel = () => {
+    if (count % 2 === 0) {
+        level++;
+        levelboard.innerText = level;
+        speed -= (level * 10);
+        //userMove();
+    }
+}
+
 const eatFruit = () => {
-    say(character.id);
-    say(fruit.id);
     if(character.id === fruit.id) {
+        count++;
         fruit.classList.remove('fruit');
         newTail = tail.pop()
         growTail(5);
         createFruit();
+        updateScore();
+        updateLevel();
     }
 };
 

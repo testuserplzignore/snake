@@ -1,4 +1,27 @@
-#gameboard {
+header {
+    margin: 1em;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h1 {
+    margin: 0;
+    font-size: 5em;
+}
+
+h2 {
+    margin: 0;
+}
+
+main {
+    margin: 1em;
+    display: flex;
+    justify-content: center;
+}
+
+.gameboard {
+    margin: 1em;
     background-color: lightslategray;
     height: 480px;
     width: 480px;
