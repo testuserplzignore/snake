@@ -23,7 +23,8 @@ const createGameboard = () => {
     }
     gameboard.removeEventListener('click', createGameboard);
     character = createCharacter();
-    growTail(10);
+    createFruit();
+    growTail(5);
     document.body.addEventListener('keyup', userMove);
 };
 
@@ -41,13 +42,12 @@ const parseIdToNum = (idString) => {
 };
 
 const newPos = () => {
-    //say(character);
+    loseCon(character);
     character.classList.remove('character');
-    //say('xy in new pos: ' + xy);
     const newId = xy[0] + ',' +xy[1];
     newTail = character;
     character = document.getElementById(newId);
-    loseCon(character.classList)
+    say(character);
     character.classList.add('character');
 };
 
@@ -56,11 +56,9 @@ const growTail = (length) => {
 };
 
 const moveTail = () => {
-    //say(newTail);
     newTail.classList.add('tail');
     tail.unshift(newTail);
     const oldTail = tail.pop();
-    //say(oldTail);
     oldTail.classList.remove('tail');
 };
 
@@ -93,26 +91,37 @@ const clearAllIntervals = () => {
     clearInterval(leftVel);
     clearInterval(downVel);
     clearInterval(upVel);
-}; 
+};
+
 let rightVel;
 let leftVel;
 let downVel;
 let upVel;
 
-const loseCon = (elementClassList) => {
-    elementClassList.forEach((element) => {
-        const charXY = parseIdToNum(character.id);
-        say(charXY);
-        if(element === 'tail'){
-            alert('you lost')
+const loseCon = (element) => {
+    if(!element){
+        lose()
+    }
+    element.classList.forEach((ele) => {
+        if(ele === 'tail'){
+            lose() 
         }
-        if(charXY[0]>47 || charXY[0]<0){
-            alert('you lost')
-        }
-        if(charXY[1]>47 || charXY[1]<0){
-            alert('you lost')
-        }
-    })
+        
+    });
+};
+
+const lose = () => {
+    alert('you lost');
+    clearAllIntervals();
+    document.body.removeEventListener('keyup', userMove);
+    //gameboard.addEventListener('click', createGameboard);
+}
+
+const createFruit = () => {
+    const x = Math.floor(Math.random() * 47);
+    const y = Math.floor(Math.random() * 47);
+    const fruit = document.getElementById(x+','+y);
+    fruit.classList.add('fruit');
 }
 
 const userMove = () => {

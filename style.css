@@ -22,6 +22,10 @@
     width: 10px;
 }
 
+.fruit {
+    background-color: blue;
+}
+
 .tail {
     background-color: green; 
 }
