@@ -5,6 +5,7 @@ const tail = [];
 let xy = [];
 let character;
 let newTail;
+let fruit;
 
 const createGameboard = () => {
     for(let y=0; y<48; y++) {
@@ -41,8 +42,28 @@ const parseIdToNum = (idString) => {
     return(xy);
 };
 
+const loseCon = (element) => {
+    if(!element){
+        lose()
+    }
+    element.classList.forEach((ele) => {
+        if(ele === 'tail'){
+            lose() 
+        }
+        
+    });
+};
+
+const lose = () => {
+    alert('you lost');
+    clearAllIntervals();
+    document.body.removeEventListener('keyup', userMove);
+    //gameboard.addEventListener('click', createGameboard);
+}
+
 const newPos = () => {
     loseCon(character);
+    eatFruit()
     character.classList.remove('character');
     const newId = xy[0] + ',' +xy[1];
     newTail = character;
@@ -98,31 +119,23 @@ let leftVel;
 let downVel;
 let upVel;
 
-const loseCon = (element) => {
-    if(!element){
-        lose()
-    }
-    element.classList.forEach((ele) => {
-        if(ele === 'tail'){
-            lose() 
-        }
-        
-    });
-};
-
-const lose = () => {
-    alert('you lost');
-    clearAllIntervals();
-    document.body.removeEventListener('keyup', userMove);
-    //gameboard.addEventListener('click', createGameboard);
-}
-
 const createFruit = () => {
     const x = Math.floor(Math.random() * 47);
     const y = Math.floor(Math.random() * 47);
-    const fruit = document.getElementById(x+','+y);
+    fruit = document.getElementById(x+','+y);
     fruit.classList.add('fruit');
-}
+};
+
+const eatFruit = () => {
+    say(character.id);
+    say(fruit.id);
+    if(character.id === fruit.id) {
+        fruit.classList.remove('fruit');
+        fruit.classList.add('tail')
+        growTail(3);
+        createFruit();
+    }
+};
 
 const userMove = () => {
     //debugger;
