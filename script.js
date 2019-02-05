@@ -132,6 +132,7 @@ const eatFruit = () => {
     if(character.id === fruit.id) {
         fruit.classList.remove('fruit');
         fruit.classList.add('tail')
+        newTail = tail.pop()
         growTail(3);
         createFruit();
     }
