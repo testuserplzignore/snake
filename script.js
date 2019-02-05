@@ -6,6 +6,7 @@ let xy = [];
 let character;
 let newTail;
 let fruit;
+let speed = 200;
 
 const createGameboard = () => {
     for(let y=0; y<48; y++) {
@@ -24,9 +25,10 @@ const createGameboard = () => {
     }
     gameboard.removeEventListener('click', createGameboard);
     character = createCharacter();
+    newTail = character;
     createFruit();
     growTail(5);
-    document.body.addEventListener('keyup', userMove);
+    document.body.addEventListener('keydown', userMove);
 };
 
 const createCharacter = () => {
@@ -62,7 +64,9 @@ const lose = () => {
 }
 
 const newPos = () => {
+    debugger;
     loseCon(character);
+    character.classList.add('tail');
     eatFruit()
     character.classList.remove('character');
     const newId = xy[0] + ',' +xy[1];
@@ -131,36 +135,33 @@ const eatFruit = () => {
     say(fruit.id);
     if(character.id === fruit.id) {
         fruit.classList.remove('fruit');
-        fruit.classList.add('tail')
         newTail = tail.pop()
-        growTail(3);
+        growTail(5);
         createFruit();
     }
 };
 
 const userMove = () => {
-    //debugger;
+    event.preventDefault();
     character = document.querySelector('.character');
     xy = parseIdToNum(character.id);
 
-    if (event.key === 'ArrowRight' && xy[0] < 47) {
+    if (event.keyCode === 39 && xy[0] < 47) {
         clearAllIntervals();
-        rightVel = setInterval(moveRight, 500);
-    }
-
-    if (event.key === 'ArrowLeft' && xy[0] > 0) {
+        moveRight();
+        rightVel = setInterval(moveRight, speed);
+    } else if (event.keyCode === 37 && xy[0] > 0) {
         clearAllIntervals();
-        leftVel = setInterval(moveLeft, 500);
-    }
-
-    if (event.key === 'ArrowDown' && xy[1] < 47) {
+        moveLeft();
+        leftVel = setInterval(moveLeft, speed);
+    } else if (event.keyCode === 40 && xy[1] < 47) {
         clearAllIntervals();
-        downVel = setInterval(moveDown, 500);
-    }
-
-    if (event.key === 'ArrowUp' && xy[1] > 0) {
+        moveDown();
+        downVel = setInterval(moveDown, speed);
+    } else if (event.keyCode === 38 && xy[1] > 0) {
         clearAllIntervals();
-        upVel = setInterval(moveUp, 500);
+        moveUp();
+        upVel = setInterval(moveUp, speed);
     }
 };
 
