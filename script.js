@@ -52,11 +52,7 @@ const parseIdToNum = (idString) => {
     return(xy);
 };
 
-const loseCon = (element) => {
-    say(element);
-    if(!element){
-        lose()
-    }
+const loseChar = (element) => {
     element.classList.forEach((ele) => {
         if(ele === 'tail'){
             lose() 
@@ -64,6 +60,12 @@ const loseCon = (element) => {
         
     });
 };
+
+const loseWall = () => {
+    if (!character) {
+        lose();
+    };
+}
 
 const lose = () => {
     alert('you lost');
@@ -85,14 +87,14 @@ const lose = () => {
 }
 
 const newPos = () => {
-    say(character);
-    loseCon(character);
+    loseChar(character);
     character.classList.add('tail');
     eatFruit()
     character.classList.remove('character');
     const newId = xy[0] + ',' +xy[1];
     newTail = character;
     character = document.getElementById(newId);
+    loseWall()
     character.classList.add('character');
 };
 
@@ -109,6 +111,7 @@ const moveTail = () => {
 
 const moveDown = () => {
     xy[1]++;
+
     newPos();
     moveTail();
 };
@@ -184,26 +187,35 @@ const userMove = () => {
     
     character = document.querySelector('.character');
     xy = parseIdToNum(character.id);
-    say(xy);
+    
+    
 
     event.preventDefault();
-    if (event.keyCode === 39 && xy[0] < 47) {
+    if (event.keyCode === 39 && xy[0] <= 47) {
+        
         clearAllIntervals();
+        loseWall()
         moveRight();
         dir = 'right';
         rightVel = setInterval(moveRight, speed);
-    } else if (event.keyCode === 37 && xy[0] > 0) {
+    } else if (event.keyCode === 37 && xy[0] >= 0) {
+        
         clearAllIntervals();
+        loseWall()
         moveLeft();
         dir = 'left';
         leftVel = setInterval(moveLeft, speed);
-    } else if (event.keyCode === 40 && xy[1] < 47) {
+    } else if (event.keyCode === 40 && xy[1] <= 47) {
+        
         clearAllIntervals();
+        loseWall();
         moveDown();
         dir = 'down';
         downVel = setInterval(moveDown, speed);
-    } else if (event.keyCode === 38 && xy[1] > 0) {
+    } else if (event.keyCode === 38 && xy[1] >= 0) {
+        
         clearAllIntervals();
+        loseWall();
         moveUp();
         dir = 'up';
         upVel = setInterval(moveUp, speed);
