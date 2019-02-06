@@ -16,6 +16,10 @@ let speed = 200;
 let score = 0;
 let count = 0;
 
+let rightVel;
+let leftVel;
+let downVel;
+let upVel;
 
 const createGameboard = () => {
     for(let y=0; y<48; y++) {
@@ -34,7 +38,6 @@ const createGameboard = () => {
     }
     gameboard.removeEventListener('click', createGameboard);
     newTail = character = createCharacter();
-    //newTail = character;
     createFruit();
     growTail(5);
     document.body.addEventListener('keydown', userMove);
@@ -58,7 +61,6 @@ const loseChar = (element) => {
         if(ele === 'tail'){
             lose() 
         }
-        
     });
 };
 
@@ -70,7 +72,7 @@ const loseWall = () => {
 
 const lose = () => {
     alert('you lost');
-    clearAllIntervals();
+    clearAllTimeouts();
     document.body.removeEventListener('keydown', userMove);
     gameboard.remove();
     gameboard = document.createElement('div');
@@ -115,39 +117,36 @@ const moveDown = () => {
     xy[1]++;
     newPos();
     moveTail();
-
+    downVel = setTimeout(moveDown, speed);
 };
 
 const moveUp = () => {
     xy[1]--;
     newPos();
     moveTail();
-    
+    upVel = setTimeout(moveUp, speed);    
 };
 
 const moveLeft = () => {
     xy[0]--;
     newPos();
     moveTail();
+    leftVel = setTimeout(moveLeft, speed);
 };
 
 const moveRight = () => {
     xy[0]++;
     newPos();
     moveTail();
+    rightVel = setTimeout(moveRight, speed);
 };
 
-const clearAllIntervals = () => {
-    clearInterval(rightVel);
-    clearInterval(leftVel);
-    clearInterval(downVel);
-    clearInterval(upVel);
+const clearAllTimeouts = () => {
+    clearTimeout(rightVel);
+    clearTimeout(leftVel);
+    clearTimeout(downVel);
+    clearTimeout(upVel);
 };
-
-let rightVel;
-let leftVel;
-let downVel;
-let upVel;
 
 const createFruit = () => {
     const x = Math.floor(Math.random() * 47);
@@ -171,11 +170,7 @@ const updateLevel = () => {
         level++;
         levelboard.innerText = level;
         speed -= (level * 2);
-        clearAllIntervals();
-        if(dir === 'right') rightVel = setInterval(moveRight, speed);
-        if(dir === 'left') leftVel = setInterval(moveLeft, speed);
-        if(dir === 'up') upVel = setInterval(moveUp, speed);
-        if(dir === 'down') downVel = setInterval(moveDown, speed);
+        clearAllTimeouts();
     };
 };
 
@@ -193,41 +188,33 @@ const eatFruit = () => {
 };
 
 const userMove = () => {
-    say(count);
     character = document.querySelector('.character');
     xy = parseIdToNum(character.id);
-    
-    //updateLevel();
-    clearAllIntervals();
     event.preventDefault();
+
     if (event.keyCode === 39 && xy[0] <= 47) {
-        
-        //clearAllIntervals();
+        clearAllTimeouts();
         loseWall()
         moveRight();
         dir = 'right';
-        rightVel = setInterval(moveRight, speed);
+
     } else if (event.keyCode === 37 && xy[0] >= 0) {
-        
-        //clearAllIntervals();
+        clearAllTimeouts();
         loseWall()
         moveLeft();
         dir = 'left';
-        leftVel = setInterval(moveLeft, speed);
+
     } else if (event.keyCode === 40 && xy[1] <= 47) {
-        
-        //clearAllIntervals();
+        clearAllTimeouts();
         loseWall();
         moveDown();
         dir = 'down';
-        downVel = setInterval(moveDown, speed);
+
     } else if (event.keyCode === 38 && xy[1] >= 0) {
-        
-        //clearAllIntervals();
+        clearAllTimeouts();
         loseWall();
         moveUp();
         dir = 'up';
-        upVel = setInterval(moveUp, speed);
     }
 };
 
