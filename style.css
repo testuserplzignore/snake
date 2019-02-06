@@ -16,10 +16,33 @@ h2 {
 
 main {
     margin: 1em;
+    /* display: flex;
+    justify-content: center; */
+}
+.game {
     display: flex;
     justify-content: center;
 }
 
+.gamestate {
+    display: flex;
+    justify-content: center;
+}
+
+.gamestate h4 {
+    margin: 0;
+}
+
+.scoreboard {
+    margin: 1em;
+}
+
+.levelboard {
+    margin: 1em;
+}
+
+
+/* styles for dynamically created divs */
 .gameboard {
     margin: 1em;
     background-color: lightslategray;

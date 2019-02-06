@@ -9,6 +9,7 @@ let character;
 let newTail;
 let fruit;
 let dir;
+let checkLevel = false;
 
 let level = 1;
 let speed = 200;
@@ -77,7 +78,8 @@ const lose = () => {
     tail = [];
     speed = 200;
     score = 0;
-    scoreboard.innerText = score + '|';
+    count = 0;
+    scoreboard.innerText = '00000';
     level = 1;
     levelboard.innerText = level;
     
@@ -111,15 +113,16 @@ const moveTail = () => {
 
 const moveDown = () => {
     xy[1]++;
-
     newPos();
     moveTail();
+
 };
 
 const moveUp = () => {
     xy[1]--;
     newPos();
     moveTail();
+    
 };
 
 const moveLeft = () => {
@@ -155,11 +158,16 @@ const createFruit = () => {
 
 const updateScore = () => {
     score += (10 * level);
-    scoreboard.innerText = score+ '|';
+    const str = "" + score;
+    const pad = "00000"
+    const ans = pad.substring(0, pad.length - str.length) + str
+    scoreboard.innerText = ans;
 };
 
 const updateLevel = () => {
-    if (count % 2 === 0) {
+    if (count % 2 === 0 && checkLevel === true) {
+        say("shouldn't be output " + count)
+        checkLevel = false;
         level++;
         levelboard.innerText = level;
         speed -= (level * 2);
@@ -175,46 +183,47 @@ const eatFruit = () => {
     if(character.id === fruit.id) {
         count++;
         fruit.classList.remove('fruit');
-        newTail = tail.pop()
+        newTail = tail.pop();
         growTail(5);
         createFruit();
         updateScore();
+        checkLevel = true;
         updateLevel();
     };
 };
 
 const userMove = () => {
-    
+    say(count);
     character = document.querySelector('.character');
     xy = parseIdToNum(character.id);
     
-    
-
+    //updateLevel();
+    clearAllIntervals();
     event.preventDefault();
     if (event.keyCode === 39 && xy[0] <= 47) {
         
-        clearAllIntervals();
+        //clearAllIntervals();
         loseWall()
         moveRight();
         dir = 'right';
         rightVel = setInterval(moveRight, speed);
     } else if (event.keyCode === 37 && xy[0] >= 0) {
         
-        clearAllIntervals();
+        //clearAllIntervals();
         loseWall()
         moveLeft();
         dir = 'left';
         leftVel = setInterval(moveLeft, speed);
     } else if (event.keyCode === 40 && xy[1] <= 47) {
         
-        clearAllIntervals();
+        //clearAllIntervals();
         loseWall();
         moveDown();
         dir = 'down';
         downVel = setInterval(moveDown, speed);
     } else if (event.keyCode === 38 && xy[1] >= 0) {
         
-        clearAllIntervals();
+        //clearAllIntervals();
         loseWall();
         moveUp();
         dir = 'up';
