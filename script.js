@@ -3,6 +3,7 @@ const say = msg => console.log(msg);
 let gameboard = document.querySelector('.gameboard');
 const scoreboard = document.querySelector('.score');
 const levelboard = document.querySelector('.level');
+
 let tail = [];
 let xy = [];
 let character;
@@ -10,6 +11,7 @@ let newTail;
 let fruit;
 let dir;
 let checkLevel = false;
+let lastPress;
 
 let level = 1;
 let speed = 200;
@@ -22,6 +24,7 @@ let downVel;
 let upVel;
 
 const createGameboard = () => {
+    gameboard.innerText = '';
     for(let y=0; y<48; y++) {
         row = document.createElement('div');
         row.classList.add('row');
@@ -59,10 +62,17 @@ const parseIdToNum = (idString) => {
 const loseChar = (element) => {
     element.classList.forEach((ele) => {
         if(ele === 'tail'){
-            lose() 
+            lose();
+            return;
         }
     });
 };
+
+//const loseChar = (element) => {
+//    if ('tail' in element.classList){
+//        lose();
+//    }
+//}
 
 const loseWall = () => {
     if (!character) {
@@ -71,7 +81,19 @@ const loseWall = () => {
 }
 
 const lose = () => {
-    alert('you lost');
+    const lossModal = document.querySelector('.modal');
+    const lossModalButton = document.querySelector('.close');
+    lossModal.style.display = 'block';
+    lossModalButton.onclick = () =>{
+        lossModal.style.display = 'none';
+        gameboard.innerText = 'Click to start';
+    }
+    window.onclick = () => {
+        if (event.target === lossModal) {
+           lossModal.style.display = 'none';
+           gameboard.innerText = 'Click to start';
+        }
+    }
     clearAllTimeouts();
     document.body.removeEventListener('keydown', userMove);
     gameboard.remove();
@@ -152,7 +174,12 @@ const createFruit = () => {
     const x = Math.floor(Math.random() * 47);
     const y = Math.floor(Math.random() * 47);
     fruit = document.getElementById(x+','+y);
-    fruit.classList.add('fruit');
+    if (fruit.classList.length > 1){
+        createFruit();
+    } else {
+        fruit.classList.add('fruit');
+    }
+    
 };
 
 const updateScore = () => {
@@ -164,12 +191,13 @@ const updateScore = () => {
 };
 
 const updateLevel = () => {
-    if (count % 2 === 0 && checkLevel === true) {
-        say("shouldn't be output " + count)
+    if (count % 5 === 0 && checkLevel === true) {
         checkLevel = false;
         level++;
         levelboard.innerText = level;
-        speed -= (level * 2);
+        if (speed > 50) {
+            speed -= (level * 5);
+        }
         clearAllTimeouts();
     };
 };
@@ -191,30 +219,40 @@ const userMove = () => {
     character = document.querySelector('.character');
     xy = parseIdToNum(character.id);
     event.preventDefault();
+    //say(event.keyCode)
+    //say(lastPress);
 
-    if (event.keyCode === 39 && xy[0] <= 47) {
+    if (event.keyCode === 39 && lastPress !== 37 && xy[0] <= 47) {
         clearAllTimeouts();
         loseWall()
         moveRight();
-        dir = 'right';
+        lastPress = event.keyCode;
+        say(event.keyCode)
+        say(lastPress);
 
-    } else if (event.keyCode === 37 && xy[0] >= 0) {
+    } else if (event.keyCode === 37 && lastPress !== 39 && xy[0] >= 0) {
         clearAllTimeouts();
         loseWall()
         moveLeft();
-        dir = 'left';
+        lastPress = event.keyCode;
+        say(event.keyCode)
+        say(lastPress);
 
-    } else if (event.keyCode === 40 && xy[1] <= 47) {
+    } else if (event.keyCode === 40 && lastPress !== 38 && xy[1] <= 47) {
         clearAllTimeouts();
         loseWall();
         moveDown();
-        dir = 'down';
+        lastPress = event.keyCode;
+        say(event.keyCode)
+        say(lastPress);
 
-    } else if (event.keyCode === 38 && xy[1] >= 0) {
+    } else if (event.keyCode === 38 && lastPress !== 40 && xy[1] >= 0) {
         clearAllTimeouts();
         loseWall();
         moveUp();
-        dir = 'up';
+        lastPress = event.keyCode;
+        say(event.keyCode)
+        say(lastPress);
     }
 };
 
