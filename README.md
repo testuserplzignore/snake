@@ -12,7 +12,7 @@ http://tacky-thrill.surge.sh/
 * snake tail gets longer when it eats a target
 * game is lost when snake collides with wall or self
 
-###DESIRED IMPLEMENTATION
+### DESIRED IMPLEMENTATION
 
 * game title
 * ~~game instructions~~
