@@ -106,6 +106,7 @@ const lose = () => {
     scoreboard.innerText = '00000';
     level = 1;
     levelboard.innerText = level;
+    lastPress = '';
     
     const game = document.querySelector('.game');
     game.appendChild(gameboard);
@@ -185,8 +186,8 @@ const createFruit = () => {
 const updateScore = () => {
     score += (10 * level);
     const str = "" + score;
-    const pad = "00000"
-    const ans = pad.substring(0, pad.length - str.length) + str
+    const pad = "00000";
+    const ans = pad.substring(0, pad.length - str.length) + str;
     scoreboard.innerText = ans;
 };
 
@@ -219,40 +220,27 @@ const userMove = () => {
     character = document.querySelector('.character');
     xy = parseIdToNum(character.id);
     event.preventDefault();
-    //say(event.keyCode)
-    //say(lastPress);
 
     if (event.keyCode === 39 && lastPress !== 37 && xy[0] <= 47) {
         clearAllTimeouts();
         loseWall()
         moveRight();
         lastPress = event.keyCode;
-        say(event.keyCode)
-        say(lastPress);
-
     } else if (event.keyCode === 37 && lastPress !== 39 && xy[0] >= 0) {
         clearAllTimeouts();
         loseWall()
         moveLeft();
         lastPress = event.keyCode;
-        say(event.keyCode)
-        say(lastPress);
-
     } else if (event.keyCode === 40 && lastPress !== 38 && xy[1] <= 47) {
         clearAllTimeouts();
         loseWall();
         moveDown();
         lastPress = event.keyCode;
-        say(event.keyCode)
-        say(lastPress);
-
     } else if (event.keyCode === 38 && lastPress !== 40 && xy[1] >= 0) {
         clearAllTimeouts();
         loseWall();
         moveUp();
         lastPress = event.keyCode;
-        say(event.keyCode)
-        say(lastPress);
     }
 };
 
