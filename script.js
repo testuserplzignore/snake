@@ -25,6 +25,7 @@ let upVel;
 
 const createGameboard = () => {
     gameboard.innerText = '';
+    
     for(let y=0; y<48; y++) {
         row = document.createElement('div');
         row.classList.add('row');
@@ -33,12 +34,12 @@ const createGameboard = () => {
             tile = document.createElement('div');
             tile.classList.add('tile');
             tile.id = x + ',' + y;
-
             row.appendChild(tile);
         }
 
         gameboard.appendChild(row);
     }
+
     gameboard.removeEventListener('click', createGameboard);
     newTail = character = createCharacter();
     createFruit();
@@ -63,22 +64,15 @@ const loseChar = (element) => {
     element.classList.forEach((ele) => {
         if(ele === 'tail'){
             lose();
-            return;
         }
     });
 };
 
-//const loseChar = (element) => {
-//    if ('tail' in element.classList){
-//        lose();
-//    }
-//}
-
 const loseWall = () => {
     if (!character) {
         lose();
-    };
-}
+    }
+};
 
 const lose = () => {
     const lossModal = document.querySelector('.modal');
@@ -180,7 +174,6 @@ const createFruit = () => {
     } else {
         fruit.classList.add('fruit');
     }
-    
 };
 
 const updateScore = () => {
