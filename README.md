@@ -31,12 +31,14 @@ shoutout to all the people who answer questions on stackOverflow
 
 ### Code Snippet
 
-```const moveDown = () => {
+```
+const moveDown = () => {
     xy[1]++;
     newPos();
     moveTail();
     downVel = setTimeout(moveDown, speed);
-};```
+};
+```
 
 originally the snake moved via a setInterval. However setIntervals do not allow for the interval to be dynamically changed, the interval needs to be cleared and a new one set. By having my move functions recursively set a timeout on themseleves I approximate a setInterval that can have the interval dynamically changed
 
@@ -45,4 +47,4 @@ originally the snake moved via a setInterval. However setIntervals do not allow 
 issue: setInterval sucks
 
 
-resolution: don't use setInterval
+resolution: don't use setIntervals
