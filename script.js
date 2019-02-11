@@ -9,7 +9,6 @@ let xy = [];
 let character;
 let newTail;
 let fruit;
-let dir;
 let checkLevel = false;
 let lastPress;
 
@@ -25,7 +24,7 @@ let upVel;
 
 const createGameboard = () => {
     gameboard.innerText = '';
-    
+
     for(let y=0; y<48; y++) {
         row = document.createElement('div');
         row.classList.add('row');
@@ -101,7 +100,7 @@ const lose = () => {
     level = 1;
     levelboard.innerText = level;
     lastPress = '';
-    
+
     const game = document.querySelector('.game');
     game.appendChild(gameboard);
     gameboard.addEventListener('click', createGameboard);
@@ -141,7 +140,7 @@ const moveUp = () => {
     xy[1]--;
     newPos();
     moveTail();
-    upVel = setTimeout(moveUp, speed);    
+    upVel = setTimeout(moveUp, speed);
 };
 
 const moveLeft = () => {
